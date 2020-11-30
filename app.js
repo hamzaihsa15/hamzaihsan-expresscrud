@@ -9,11 +9,10 @@ var usersRouter = require("./routes/users");
 var productsRouter = require("./routes/products");
 var session = require("express-session");
 var sessionauth = require("./middlewares/sessionauth");
-const { Mongoose } = require("mongoose");
-const connectDB = require("./DB/connection");
+
 var app = express();
 app.use(session({ secret: "keyboard cat", cookie: { maxAge: 60000 } }));
-connectDB();
+
 // view engine setup
 app.use(
   session({
@@ -51,10 +50,20 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
-// mongoose.connect("mongodb://localhost/expresscrud",{ useUnifiedTopology: true, useNewUrlParser: true  }).then(()=>{
-//     console.log("Connection Successfully Established");
-// }).catch((err)=>{
-//     console.log("Connection Error");
-//     console.log(err);
-// });
+const db =
+  "mongodb+srv://hamza131:hamza12345@hamza.o1qkf.mongodb.net/hamza?retryWrites=true&w=majority";
+
+mongoose
+  .connect(db, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    socketTimeoutMS: 0,
+  })
+  .then(() => {
+    // winston.info(`Connected to ${db}...`);
+    console.clear();
+    console.log(`Connected to db...`);
+    // testCalculation();
+    // require("./models/addDummyData")();
+  });
 module.exports = app;
